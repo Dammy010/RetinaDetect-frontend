@@ -1,44 +1,33 @@
 import { useState } from 'react';
-import axios from '../utils/axios'; 
+import axios from 'axios';
 
 export default function UploadForm() {
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
   const [imageURL, setImageURL] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const handleUpload = async (e) => {
     e.preventDefault();
     setLoading(true);
     setResult(null);
-    setError('');
 
-    if (!file) return;
+    const formData = new FormData();
+    formData.append('image', file);
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const base64Image = reader.result;
+    try {
+      const res = await axios.post('/api/predict', formData, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
 
-      try {
-        const res = await axios.post(
-          '/api/predict',
-          { image: base64Image },
-          { withCredentials: true }
-        );
-
-        setResult(res.data.result);
-        setImageURL(res.data.image); 
-      } catch (err) {
-        console.error('Prediction failed:', err);
-        const serverMsg = err?.response?.data?.message;
-        setError(serverMsg || 'Prediction failed. Try again.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    reader.readAsDataURL(file);
+      setResult(res.data.result);
+      setImageURL(res.data.image);
+    } catch (err) {
+      console.error('Prediction failed:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,7 +39,6 @@ export default function UploadForm() {
         required
         className="w-full border p-2 rounded"
       />
-
       <button
         type="submit"
         disabled={!file || loading}
@@ -59,22 +47,10 @@ export default function UploadForm() {
         {loading ? 'Analyzing...' : 'Predict'}
       </button>
 
-      {error && (
-        <div className="bg-red-100 text-red-700 p-2 rounded">
-          {error}
-        </div>
-      )}
-
       {result && (
         <div className="mt-6 text-center">
           <p className="text-lg font-semibold">Result: {result}</p>
-          {imageURL && (
-            <img
-              src={imageURL}
-              alt="Retina"
-              className="mt-4 max-w-full rounded shadow"
-            />
-          )}
+          {imageURL && <img src={imageURL} alt="Uploaded Retina" className="mt-4 max-w-full rounded shadow" />}
         </div>
       )}
     </form>
