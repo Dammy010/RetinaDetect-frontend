@@ -47,27 +47,30 @@ export default function Navbar() {
           )}
 
           {!loading && user && (
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={toggleDropdown}
-                className="flex items-center text-blue-600 font-medium hover:underline"
-                aria-haspopup="true"
-                aria-expanded={dropdownOpen}
-              >
-                {user.name}
-                <ChevronDown className="ml-1" size={16} />
-              </button>
-              {dropdownOpen && (
-                <div className="absolute right-0 mt-2 bg-white shadow rounded w-32 py-2 z-10">
-                  <button
-                    onClick={logout}
-                    className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 text-gray-700"
-                  >
-                    Sign Out
-                  </button>
-                </div>
-              )}
-            </div>
+            <>
+              <Link to="/history" className="text-gray-700 hover:text-blue-600">History</Link>
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={toggleDropdown}
+                  className="flex items-center text-blue-600 font-medium hover:underline"
+                  aria-haspopup="true"
+                  aria-expanded={dropdownOpen}
+                >
+                  {user.name}
+                  <ChevronDown className="ml-1" size={16} />
+                </button>
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 bg-white shadow rounded w-32 py-2 z-10">
+                    <button
+                      onClick={logout}
+                      className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 text-gray-700"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            </>
           )}
         </div>
 
@@ -104,6 +107,13 @@ export default function Navbar() {
 
           {!loading && user && (
             <>
+              <Link
+                to="/history"
+                onClick={closeMobileMenu}
+                className="block text-gray-700 hover:text-blue-600"
+              >
+                History
+              </Link>
               <p className="block text-gray-700 font-medium">{user.name}</p>
               <button
                 onClick={() => {

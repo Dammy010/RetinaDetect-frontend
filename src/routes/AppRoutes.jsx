@@ -6,6 +6,7 @@ import HowItWorks from "../pages/HowItWorks";
 import LoginPage from "../pages/LoginPage";
 import SignupPage from "../pages/SignupPage";
 import PredictPage from "../pages/PredictPage";
+import PredictionHistory from "../pages/PredictionHistory";
 import { useAuth } from "../context/AuthContext";
 
 const PrivateRoute = ({ children }) => {
@@ -35,6 +36,14 @@ export default function AppRoutes() {
         element={
           <PrivateRoute>
             <PredictPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/history"
+        element={
+          <PrivateRoute>
+            <PredictionHistory />
           </PrivateRoute>
         }
       />
