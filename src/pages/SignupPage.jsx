@@ -18,7 +18,7 @@ export default function SignupPage() {
     try {
       const res = await axios.post('/api/auth/signup', { name, email, password }, { withCredentials: true });
       login(res.data.user);
-      navigate('/predict');
+      navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Signup failed');
     }

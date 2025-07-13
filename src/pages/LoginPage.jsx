@@ -26,7 +26,7 @@ export default function LoginPage() {
       );
 
       login(res.data.user);
-      navigate('/predict');
+      navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     } finally {
