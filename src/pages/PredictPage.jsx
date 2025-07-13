@@ -41,23 +41,29 @@ export default function PredictPage() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('image', file);
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64Image = reader.result;
 
-    try {
-      setLoading(true);
-      const res = await axios.post('/api/predict', formData, {
-        withCredentials: true,
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      try {
+        setLoading(true);
+        const res = await axios.post(
+          '/api/predict',
+          { image: base64Image },
+          { withCredentials: true }
+        );
 
-      setResult(res.data.result);
-      setImageURL(res.data.image);
-    } catch (err) {
-      setError('Prediction failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+        setResult(res.data.result);
+        setImageURL(res.data.image);
+      } catch (err) {
+        console.error(err);
+        setError(err?.response?.data?.message || 'Prediction failed. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    reader.readAsDataURL(file);
   };
 
   const handleClear = () => {
