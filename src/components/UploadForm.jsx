@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from '../utils/axios'; // Make sure this points to your axios config
+import axios from '../utils/axios';
 
 export default function UploadForm() {
   const [file, setFile] = useState(null);
@@ -18,7 +18,7 @@ export default function UploadForm() {
 
     const reader = new FileReader();
     reader.onloadend = async () => {
-      const base64Image = reader.result; // includes the data URI
+      const base64Image = reader.result; 
 
       try {
         const res = await axios.post(
@@ -28,7 +28,7 @@ export default function UploadForm() {
         );
 
         setResult(res.data.result);
-        setImageURL(res.data.image); // should be same as base64 string
+        setImageURL(res.data.image); 
       } catch (err) {
         console.error('Prediction failed:', err);
         const serverMsg = err?.response?.data?.message;
